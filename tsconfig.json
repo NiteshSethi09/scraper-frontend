@@ -15,6 +15,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "Node",
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],

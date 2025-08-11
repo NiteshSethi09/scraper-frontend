@@ -1,4 +1,5 @@
 import { QueryClient, type QueryFunction } from "@tanstack/react-query";
+import axios, { AxiosResponse, Method as AxiosMethod } from "axios";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -6,20 +7,22 @@ async function throwIfResNotOk(res: Response) {
     throw new Error(`${res.status}: ${text}`);
   }
 }
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5005",
+});
 
 export async function apiRequest(
-  method: string,
+  method: AxiosMethod,
   url: string,
   data?: unknown | undefined
-): Promise<Response> {
-  const res = await fetch(url, {
+): Promise<AxiosResponse> {
+  const res = await axiosInstance({
+    url,
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
+    data: data ? JSON.stringify(data) : undefined,
   });
 
-  await throwIfResNotOk(res);
   return res;
 }
 
